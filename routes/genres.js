@@ -3,12 +3,16 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-// Model(to be replaced with Mongo)
-var genres = [
-    { id: 1, name: "Action" },
-    { id: 2, name: "Horror" },
-    { id: 3, name: "Romance" },
-];
+// MongoDB model for Genre collection
+const Genre = mongoose.model('Genre', new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 50
+    }
+}));
+
 
 /**--------------ListCreateView------------
  * endpoint: /api/genres/
@@ -17,21 +21,22 @@ var genres = [
  *-----------------------------------------*/
 
 // GET request, query list of genres 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const genres = await Genre.find().sort('name')
     res.send(genres);
 })
 
 // POST request, create a new genres
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     // Validate the req.body
     const result = validateReq(req.body);
     console.log(result);
     if (result.error) return res.status(400).send(result.error.details[0].message);
-    const new_genre = {
-        id: genres.length + 1,
+    let new_genre = new Genre({
         name: req.body.name
-    }
-    genres.push(new_genre);
+    })
+    new_genre = await new_genre.save();
+    console.log(new_genre);
     res.status(200).send(`Successfully create a new genre: ${new_genre.name}`);
 })
 
@@ -44,10 +49,8 @@ router.post('/', (req, res) => {
  *-----------------------------------------*/
 
 // GET request, query specific genre by id
-router.get('/:id', (req, res) => {
-    const genre = genres.find((element) => {
-        return element.id === parseInt(req.params.id);
-    });
+router.get('/:id', async (req, res) => {
+    const genre = await Genre.findById(req.params.id)
     if (!genre) {
         return res.status(404).send("There is no genre with this specifid id")
     };
@@ -55,11 +58,9 @@ router.get('/:id', (req, res) => {
 })
 
 // PUT request, update specific genre by id
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     // verify if genre exist
-    const genre = genres.find((element) => {
-        return element.id === parseInt(req.params.id);
-    });
+    let genre = await Genre.findById(req.params.id)
     if (!genre) {
         return res.status(404).send("There is no genre with this specifid id")
     };
@@ -71,26 +72,18 @@ router.put('/:id', (req, res) => {
     }
 
     // update if everything is correct
-    // Did not update the genres model here, but need to update the specific one in MongoDb
-    genre.name = req.body.name;
+    genre = await Genre.findByIdAndUpdate({ _id: req.params.id }, { name: req.body.name }, { new: true });
     res.send(genre);
 })
 
 // DELETE request, update specific genre by id
-router.delete('/:id', (req, res) => {
-    const genre = genres.find(element => {
-        return element.id === parseInt(req.params.id);
-    })
+router.delete('/:id', async (req, res) => {
+    let genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) {
         return res.status(404).send("There is no hero with this provided id")
     }
-
-    // Delete
-    const index = genres.indexOf(genre);
-    genres.splice(index, 1);
-
-    // Return the same genre (the one that deleted)
-    res.send("Genre deleted");
+    // Return the same one that got deleted
+    res.send(genre);
 });
 
 
@@ -98,7 +91,7 @@ router.delete('/:id', (req, res) => {
 // Validating req.body
 function validateReq(body) {
     const schema = {
-        name: Joi.string().min(3).required()
+        name: Joi.string().min(5).required()
     };
     const result = Joi.validate(body, schema);
     return result;
