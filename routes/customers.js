@@ -1,27 +1,7 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const { Customer, validate } = require('../models/customers');
 const express = require('express');
 const router = express.Router();
 
-// MongoDB model for Genre collection
-const Customer = mongoose.model('Customer', new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 50
-    },
-    phone: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 10
-    },
-    isGold: {
-        type: Boolean,
-        default: false,
-    }
-}));
 
 
 /**--------------ListCreateView------------
@@ -36,7 +16,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const result = validateReq(req.body);
+    const result = validate(req.body);
     // console.log(result.error);
     if (result.error) return res.status(400).send(result.error.details[0].message);
 
@@ -66,7 +46,7 @@ router.get('/:id', async (req, res) => {
 
 
 router.put('/:id', async (req, res) => {
-    const result = validateReq(req.body);
+    const result = validate(req.body);
     console.log(result.error);
     if (result.error) return res.status(400).send(result.error.details[0].message);
 
@@ -87,17 +67,5 @@ router.delete('/:id', async (req, res) => {
     if (!customer) return res.status(404).send('There is no customer with this specifid id');
     res.send(customer);
 })
-
-// Utils func
-function validateReq(customer) {
-    const schema = {
-        name: Joi.string().min(5).max(50).required(),
-        phone: Joi.string().min(5).max(10).required(),
-        isGold: Joi.boolean()
-    };
-    const result = Joi.validate(customer, schema);
-    return result;
-}
-
 
 module.exports = router;

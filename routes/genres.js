@@ -1,17 +1,6 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const { Genre, validate } = require('../models/genres')
 const express = require('express');
 const router = express.Router();
-
-// MongoDB model for Genre collection
-const Genre = mongoose.model('Genre', new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 50
-    }
-}));
 
 
 /**--------------ListCreateView------------
@@ -29,7 +18,7 @@ router.get('/', async (req, res) => {
 // POST request, create a new genres
 router.post('/', async (req, res) => {
     // Validate the req.body
-    const result = validateReq(req.body);
+    const result = validate(req.body);
     console.log(result);
     if (result.error) return res.status(400).send(result.error.details[0].message);
     let new_genre = new Genre({
@@ -66,7 +55,7 @@ router.put('/:id', async (req, res) => {
     };
 
     // if exist => validate updated data
-    const result = validateReq(req.body);
+    const result = validate(req.body);
     if (result.error) {
         return res.status(400).send(result.error.details[0].message);
     }
@@ -85,17 +74,5 @@ router.delete('/:id', async (req, res) => {
     // Return the same one that got deleted
     res.send(genre);
 });
-
-
-/** ------------------Utils functions------------------ */
-// Validating req.body
-function validateReq(body) {
-    const schema = {
-        name: Joi.string().min(5).required()
-    };
-    const result = Joi.validate(body, schema);
-    return result;
-}
-
 
 module.exports = router;
