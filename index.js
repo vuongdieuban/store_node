@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const genres = require('./routes/genres.js');
-const customers = require('./routes/customers')
+const genres = require('./routes/genres');
+const customers = require('./routes/customers');
 const express = require('express');
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Routing
 app.use('/api/genres', genres);
-app.user('api/customers', customers);
+app.use('/api/customers', customers);
 
 // Listen on Port
 const port = process.env.PORT || 3000;
