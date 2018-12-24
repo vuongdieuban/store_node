@@ -36,8 +36,8 @@ function validateReq(body) {
     const schema = {
         name: Joi.string().min(5).required(),
         genreId: Joi.string().required(),
-        numberInStock: Joi.Number().min(0).max(255).required(),
-        dailyRentalRate: Joi.Number().min(0).max(255).required(),
+        numberInStock: Joi.number().min(0).max(255).required(),
+        dailyRentalRate: Joi.number().min(0).max(255).required(),
     };
     const result = Joi.validate(body, schema);
     return result;
