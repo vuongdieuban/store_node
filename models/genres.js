@@ -2,14 +2,16 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 // MongoDB model for Genre collection
-const Genre = mongoose.model('Genre', new mongoose.Schema({
+const genreSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 50
     }
-}));
+});
+
+const Genre = mongoose.model('Genre', genreSchema);
 
 
 /** ------------------Utils functions------------------ */
@@ -24,3 +26,4 @@ function validateReq(body) {
 
 module.exports.Genre = Genre;
 module.exports.validate = validateReq;
+module.exports.genreSchema = genreSchema;
