@@ -1,9 +1,13 @@
 const { Rental, validate } = require('../models/rentals');
 const { Movie } = require('../models/movies');
 const { Customer } = require('../models/customers');
+const mongoose = require('mongoose');
+const Fawn = require('fawn');
 const express = require('express');
 const router = express.Router();
 
+// Use Fawn library for transactions in database
+Fawn.init(mongoose);
 
 /**--------------ListCreateView------------
  * endpoint: /api/rentals/
@@ -42,10 +46,24 @@ router.post('/', async (req, res) => {
         dateReturned: returnDate(),
     });
 
-    new_rental = await new_rental.save();
-    movie.numberInStock--;
-    movie.save();
-    res.status(200).send(new_rental);
+    try {
+        // for two phase commit of MongoDb, (atomic in RDBMS)
+        new Fawn.Task()
+            .save('rentals', new_rental)    // rentals is the name of the collection (case sensitive--check mongodb )
+            .update('movies', { _id: movie._id }, {
+                $inc: { numberInStock: -1 }
+            })
+            .run();
+        res.status(200).send(new_rental);
+    }
+    catch (ex) {
+        res.status(500).send('Something failed in the server. Please try again later');
+    }
+
+    // new_rental = await new_rental.save();
+    // movie.numberInStock--;
+    // movie.save();
+    // res.status(200).send(new_rental);
 });
 
 // Utils functions
