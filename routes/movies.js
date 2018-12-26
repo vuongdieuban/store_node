@@ -88,7 +88,7 @@ router.put('/:id', async (req, res) => {
 // Delete
 router.delete('/:id', async (req, res) => {
     const movie = await Movie.findByIdAndRemove(req.params.id);
-    if (!movie) return res.status(404).send("There is no movie with this specifid id");
+    if (!movie) return res.status(400).send("Invalid Movie");
     res.send(movie);
 });
 

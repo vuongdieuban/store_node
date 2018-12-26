@@ -57,14 +57,14 @@ router.put('/:id', async (req, res) => {
         isGold: req.body.isGold,
     }, { new: true });
 
-    if (!customer) return res.status(404).send('The customer with the given ID was not found.');
+    if (!customer) return res.status(400).send('There is no customer with this specifid id');
     res.send(customer);
 })
 
 
 router.delete('/:id', async (req, res) => {
     const customer = await Customer.findByIdAndRemove(req.params.id);
-    if (!customer) return res.status(404).send('There is no customer with this specifid id');
+    if (!customer) return res.status(400).send('Invalid Customer');
     res.send(customer);
 })
 

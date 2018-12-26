@@ -51,7 +51,7 @@ router.put('/:id', async (req, res) => {
     // verify if genre exist
     let genre = await Genre.findById(req.params.id)
     if (!genre) {
-        return res.status(404).send("There is no genre with this specifid id")
+        return res.status(400).send("Invalid Genre")
     };
 
     // if exist => validate updated data
@@ -69,7 +69,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     let genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) {
-        return res.status(404).send("There is no hero with this provided id")
+        return res.status(400).send("Invalid Genre")
     }
     // Return the same one that got deleted
     res.send(genre);
