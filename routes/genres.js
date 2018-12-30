@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const { Genre, validate } = require('../models/genres')
 const express = require('express');
 const router = express.Router();
@@ -16,7 +17,8 @@ router.get('/', async (req, res) => {
 })
 
 // POST request, create a new genres
-router.post('/', async (req, res) => {
+// auth (authorization) is middleware function that protect this endpoint
+router.post('/', auth, async (req, res) => {
     // Validate the req.body
     const result = validate(req.body);
     console.log(result);
@@ -47,7 +49,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // PUT request, update specific genre by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     // verify if genre exist
     let genre = await Genre.findById(req.params.id)
     if (!genre) {
@@ -66,7 +68,7 @@ router.put('/:id', async (req, res) => {
 })
 
 // DELETE request, update specific genre by id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     let genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) {
         return res.status(400).send("Invalid Genre")

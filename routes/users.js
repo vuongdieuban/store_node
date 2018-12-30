@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User, validate } = require('../models/users');
@@ -5,9 +6,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-    const users = await User.find().sort(username);
-    res.status(200).send(users);
+router.get('/me', auth, async (req, res) => {
+    // req.user comes from auth middleware function. If not auth, the async (req,res) would not be reached
+    const user = await User.findById(req.user._id).select('-password');
+    res.status(200).send(user);
 });
 
 router.post('/', async (req, res) => {
