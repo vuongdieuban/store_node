@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-// Login -- Authentication
+// Login -- Authentication, Client store the token in local storage and send token to protected routes to gain access
+// Logout -- Responsible on the client side, delete the token to logout
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
