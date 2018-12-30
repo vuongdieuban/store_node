@@ -1,4 +1,5 @@
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const { Genre, validate } = require('../models/genres')
 const express = require('express');
 const router = express.Router();
@@ -68,7 +69,7 @@ router.put('/:id', auth, async (req, res) => {
 })
 
 // DELETE request, update specific genre by id
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
     let genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) {
         return res.status(400).send("Invalid Genre")
