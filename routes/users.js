@@ -1,3 +1,5 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User, validate } = require('../models/users');
@@ -29,9 +31,12 @@ router.post('/', async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     user = await user.save();
 
+    const token = user.generateAuthToken();
+
     // Using lodash library to send specific properties of object
     // can also be used when create new User(_pick(req.body,['username','email','password']));
-    res.status(200).send(_.pick(user, ['_id', 'username', 'email']));
+    // Send the jwtToken in the headers of the response. This means that client is logged in after resgister. They can use this token to access api 
+    res.status(200).header('x-auth-token', token).send(_.pick(user, ['_id', 'username', 'email']));
 });
 
 module.exports = router;    

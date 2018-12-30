@@ -1,3 +1,4 @@
+const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const genres = require('./routes/genres');
@@ -9,6 +10,14 @@ const auth = require('./routes/auth');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+
+/**set jwtPrivateKey in terminal
+ * in PowerShell: $env:video_store_jwtPrivateKey="optionalPrivateKeyString" 
+ * in GitBash: export video_store_jwtPrivateKey="optionalPrivateKeyString" */
+if (!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: jwtPrivateKey is not defined');
+    process.exit(1);
+}
 
 // Connect to Mongodb 
 mongoose.connect('mongodb://localhost/video_store', { useNewUrlParser: true })

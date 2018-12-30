@@ -1,7 +1,9 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
-const User = new mongoose.model('User', new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -21,7 +23,15 @@ const User = new mongoose.model('User', new mongoose.Schema({
         minlength: 5,
         maxlength: 1024
     }
-}));
+});
+
+// Add method to userSchema (user object), 'this' refer to specific user object
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+    return token;
+};
+
+const User = new mongoose.model('User', userSchema);
 
 
 // Validate Customer
