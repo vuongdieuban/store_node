@@ -1,8 +1,10 @@
+const asyncMiddleware = require('../middleware/async');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const { Genre, validate } = require('../models/genres')
 const express = require('express');
 const router = express.Router();
+
 
 
 /**--------------ListCreateView------------
@@ -12,10 +14,12 @@ const router = express.Router();
  *-----------------------------------------*/
 
 // GET request, query list of genres 
-router.get('/', async (req, res) => {
+// asyncMiddlware handles try_catch block, returns async function back. This function is unneccessary if use express-async-errors module
+router.get('/', asyncMiddleware(async (req, res) => {
+    // throw new Error('Testing winston log file');
     const genres = await Genre.find().sort('name')
     res.send(genres);
-})
+}));
 
 // POST request, create a new genres
 // auth (authorization) is middleware function that protect this endpoint
@@ -30,7 +34,7 @@ router.post('/', auth, async (req, res) => {
     new_genre = await new_genre.save();
     console.log(new_genre);
     res.status(200).send(`Successfully create a new genre: ${new_genre.name}`);
-})
+});
 
 
 /**--------------DetailView------------

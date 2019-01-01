@@ -1,5 +1,6 @@
 node_modules
 .vscode
+*.log
 yarn.lock
 package-lock.json
 test.js
