@@ -1,8 +1,9 @@
 const express = require('express');
-const { exceptionHandler, logger } = require('./startup/logging');
+const { exceptionHandler } = require('./startup/logging');
 const app = express();
 
-exceptionHandler(logger);
+exceptionHandler();
+
 require('./startup/db')();
 require('./startup/config')();
 require('./startup/routes')(app);

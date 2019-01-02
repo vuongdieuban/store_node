@@ -1,28 +1,24 @@
 const winston = require('winston');
 const { format, transports } = winston;
-const { combine, colorize, prettyPrint } = format;
+const { combine, colorize, prettyPrint, simple } = format;
 require('express-async-errors'); // module for handling route errors, similar functionality to '../middleware/async'
 
 const logger = winston.createLogger({
-    level: 'info',
     format: combine(
-        colorize(),
-        prettyPrint()
+        prettyPrint(),
+        colorize()
     ),
-    defaultMeta: { service: 'user-service' },
     transports: [
-        new transports.File({ filename: '../error.log', level: 'error' }),
-        new transports.File({ filename: '../combined.log' }),
-        new transports.Console({
-            format: format.simple()
-        })
+        new transports.File({ filename: `${__dirname}/../logs/error.log`, level: "error" }),
+        new transports.File({ filename: `${__dirname}/../logs/combined.log` }),
+        new transports.Console({ level: 'debug' })
     ]
 });
 
 function exceptionHandler(logger) {
     // Call exceptions.handle with a transport to handle exceptions
     logger.exceptions.handle(
-        new transports.File({ filename: '../uncaughtException.log' }),
+        new transports.File({ filename: `${__dirname}/../logs/uncaughtException.log` }),
         new transports.Console({
             format: format.simple()
         })
