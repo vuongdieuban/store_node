@@ -1,5 +1,5 @@
 const express = require('express');
-const { exceptionHandler } = require('./startup/logging');
+const { exceptionHandler, logger } = require('./startup/logging');
 const app = express();
 
 exceptionHandler();

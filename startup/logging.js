@@ -15,7 +15,7 @@ const logger = winston.createLogger({
     ]
 });
 
-function exceptionHandler(logger) {
+function exceptionHandler() {
     // Call exceptions.handle with a transport to handle exceptions
     logger.exceptions.handle(
         new transports.File({ filename: `${__dirname}/../logs/uncaughtException.log` }),
