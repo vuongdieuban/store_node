@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +24,8 @@
     "nodemon": "^1.18.9",
     "package.json": "^2.0.1",
     "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
