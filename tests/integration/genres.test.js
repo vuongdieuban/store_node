@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 let server;
 
-describe("/api/genres -- test the routes", () => {
+describe("/api/genres -- test the genre routes", () => {
   // beforeEach() runs every time before each test (before the it('should ...') block)
   beforeEach(() => {
     server = require("../../index.js");
@@ -95,4 +95,3 @@ describe("/api/genres -- test the routes", () => {
     });
   });
 });
-3;
