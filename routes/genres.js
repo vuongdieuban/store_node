@@ -29,7 +29,6 @@ router.get(
 router.post("/", auth, async (req, res) => {
   // Validate the req.body
   const result = validate(req.body);
-  console.log(result);
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
   let new_genre = new Genre({
@@ -37,7 +36,7 @@ router.post("/", auth, async (req, res) => {
   });
   new_genre = await new_genre.save();
   console.log(new_genre);
-  res.status(200).send(`Successfully create a new genre: ${new_genre.name}`);
+  res.status(200).send(new_genre);
 });
 
 /**--------------DetailView------------

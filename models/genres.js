@@ -19,6 +19,7 @@ function validateReq(body) {
   const schema = {
     name: Joi.string()
       .min(5)
+      .max(50)
       .required()
   };
   const result = Joi.validate(body, schema);
