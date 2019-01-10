@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 let server;
 
-describe("/api/genres", () => {
+describe("/api/genres -- test the routes", () => {
   beforeEach(() => {
     server = require("../../index.js");
   });

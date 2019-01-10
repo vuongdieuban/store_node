@@ -3,6 +3,7 @@ const asyncMiddleware = require("../middleware/async");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 const { Genre, validate } = require("../models/genres");
+const validateObjectId = require("../middleware/validateObjectId");
 const express = require("express");
 const router = express.Router();
 
@@ -47,11 +48,7 @@ router.post("/", auth, async (req, res) => {
  *-----------------------------------------*/
 
 // GET request, query specific genre by id
-router.get("/:id", async (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(404).send("Invalid ID");
-  }
-
+router.get("/:id", validateObjectId, async (req, res) => {
   const genre = await Genre.findById(req.params.id);
   if (!genre) {
     return res.status(404).send("There is no genre with this specifid id");
@@ -60,7 +57,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT request, update specific genre by id
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", validateObjectId, auth, async (req, res) => {
   // verify if genre exist
   let genre = await Genre.findById(req.params.id);
   if (!genre) {
@@ -83,7 +80,7 @@ router.put("/:id", auth, async (req, res) => {
 });
 
 // DELETE request, update specific genre by id
-router.delete("/:id", [auth, admin], async (req, res) => {
+router.delete("/:id", validateObjectId, [auth, admin], async (req, res) => {
   let genre = await Genre.findByIdAndRemove(req.params.id);
   if (!genre) {
     return res.status(400).send("Invalid Genre");
