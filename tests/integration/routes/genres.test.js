@@ -1,6 +1,6 @@
 const request = require("supertest");
-const { Genre } = require("../../models/genres");
-const { User } = require("../../models/users");
+const { Genre } = require("../../../models/genres");
+const { User } = require("../../../models/users");
 const mongoose = require("mongoose");
 
 let server;
@@ -8,11 +8,11 @@ let server;
 describe("/api/genres -- test the genre routes", () => {
   // beforeEach() runs every time before each test (before the it('should ...') block)
   beforeEach(() => {
-    server = require("../../index.js");
+    server = require("../../../index.js");
   });
   afterEach(async () => {
     server.close();
-    await Genre.remove({}); // clear the database
+    await Genre.deleteMany({}); // clear the database
   });
 
   describe("GET /", () => {
