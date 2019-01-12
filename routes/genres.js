@@ -60,7 +60,7 @@ router.put("/:id", validateObjectId, auth, async (req, res) => {
   // verify if genre exist
   let genre = await Genre.findById(req.params.id);
   if (!genre) {
-    return res.status(400).send("Invalid Genre");
+    return res.status(404).send("Invalid Genre");
   }
 
   // if exist => validate updated data
@@ -82,7 +82,7 @@ router.put("/:id", validateObjectId, auth, async (req, res) => {
 router.delete("/:id", validateObjectId, [auth, admin], async (req, res) => {
   let genre = await Genre.findByIdAndRemove(req.params.id);
   if (!genre) {
-    return res.status(400).send("Invalid Genre");
+    return res.status(404).send("Invalid Genre");
   }
   // Return the same one that got deleted
   res.send(genre);
