@@ -12,8 +12,8 @@ describe("/api/genres -- test the genre routes", () => {
   });
 
   afterEach(async () => {
-    server.close();
     await Genre.deleteMany({}); // clear the database
+    await server.close();
   });
 
   describe("GET /:id", () => {
