@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose"
+    "test": "jest --watchAll --verbose --env=node"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "joi-objectid": "^2.0.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
+    "moment": "^2.23.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.0",
     "nodemon": "^1.18.9",
