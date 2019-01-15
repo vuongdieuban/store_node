@@ -16,7 +16,7 @@ Fawn.init(mongoose);
  * POST request for renting a movie
  *-----------------------------------------*/
 router.get("/", async (req, res) => {
-  const rentals = Rental.find().sort("dateRented");
+  const rentals = await Rental.find().sort("dateRented");
   res.status(200).send(rentals);
 });
 

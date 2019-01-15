@@ -1,4 +1,5 @@
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin.js");
 const { Customer, validate } = require("../models/customers");
 const express = require("express");
 const validateObjectId = require("../middleware/validateObjectId");
@@ -67,7 +68,7 @@ router.put("/:id", validateObjectId, auth, async (req, res) => {
   res.send(customer);
 });
 
-router.delete("/:id", validateObjectId, auth, async (req, res) => {
+router.delete("/:id", validateObjectId, [auth, admin], async (req, res) => {
   const customer = await Customer.findByIdAndRemove(req.params.id);
   if (!customer) return res.status(400).send("Invalid Customer");
   res.send(customer);
