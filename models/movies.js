@@ -2,33 +2,34 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const { genreSchema } = require("./genres.js");
 
-const movieSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 200
-  },
-  genre: {
-    type: genreSchema,
-    required: true
-  },
-  numberInStock: {
-    type: Number,
-    min: 0,
-    max: 255,
-    required: true
-  },
-  dailyRentalRate: {
-    type: Number,
-    min: 0,
-    max: 255,
-    required: true
-  }
-});
-
 // MongoDB model for Movie collection, embedded genreSchema from Genre Model
-const Movie = mongoose.model("Movie", movieSchema);
+const Movie = mongoose.model(
+  "Movie",
+  new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+      minlength: 5,
+      maxlength: 200
+    },
+    genre: {
+      type: genreSchema,
+      required: true
+    },
+    numberInStock: {
+      type: Number,
+      min: 0,
+      max: 255,
+      required: true
+    },
+    dailyRentalRate: {
+      type: Number,
+      min: 0,
+      max: 255,
+      required: true
+    }
+  })
+);
 
 /** ------------------Utils functions------------------ */
 // Validating req.body
@@ -53,4 +54,3 @@ function validateReq(body) {
 
 module.exports.Movie = Movie;
 module.exports.validate = validateReq;
-module.exports.movieSchema = movieSchema;

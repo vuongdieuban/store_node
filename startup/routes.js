@@ -15,7 +15,6 @@ module.exports = function(app) {
 
   // allow cors
   app.use(cors());
-
   // Routing
   app.use("/api/genres", genres);
   app.use("/api/customers", customers);

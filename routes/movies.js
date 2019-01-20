@@ -25,7 +25,7 @@ router.post("/", auth, async (req, res) => {
     return res.status(400).send(result.error.details[0].message);
 
   try {
-    let genre = await Genre.findById(req.body.genreId);
+    const genre = await Genre.findById(req.body.genreId);
 
     let movie = new Movie({
       name: req.body.name,
@@ -36,7 +36,7 @@ router.post("/", auth, async (req, res) => {
       numberInStock: req.body.numberInStock,
       dailyRentalRate: req.body.dailyRentalRate
     });
-    await movie.save();
+    movie = await movie.save();
     res.status(200).send(movie);
   } catch (ex) {
     console.log(ex.message);
@@ -99,5 +99,3 @@ router.delete("/:id", validateObjectId, [auth, admin], async (req, res) => {
 });
 
 module.exports = router;
-
-//----------------------------------------------------------------------------------------
