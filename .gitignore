@@ -2,6 +2,7 @@ node_modules
 logs
 coverage
 notes.md
+TODOs.md
 *.log
 .vscode
 .eslintrc.js

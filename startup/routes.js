@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const error = require("../middleware/error");
 const genres = require("../routes/genres");
 const customers = require("../routes/customers");
@@ -11,6 +12,9 @@ const returns = require("../routes/returns");
 module.exports = function(app) {
   // using JSON.parse() on incoming(serialized) JSON request.body and deserialize into native JS object req.body
   app.use(express.json());
+
+  // allow cors
+  app.use(cors());
 
   // Routing
   app.use("/api/genres", genres);
