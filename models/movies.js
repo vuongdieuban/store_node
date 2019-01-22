@@ -27,6 +27,9 @@ const Movie = mongoose.model(
       min: 0,
       max: 255,
       required: true
+    },
+    movieImage: {
+      type: String
     }
   })
 );

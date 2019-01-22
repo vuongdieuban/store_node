@@ -15,6 +15,10 @@ module.exports = function(app) {
 
   // allow cors
   app.use(cors());
+
+  // allow to access static folder
+  app.use("/uploads", express.static("uploads"));
+
   // Routing
   app.use("/api/genres", genres);
   app.use("/api/customers", customers);
