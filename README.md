@@ -2,13 +2,11 @@
 ---
 Store API built with Node.js and Express  
 
+CRUD operations for genres, movies, users, customers, rentals, returns. Authorization and Authentication with JSon Web Token (JWT)  
+
 Registered Users are Employees of the store  
 
-Registered Customers are Customers of the store
-
-This app is just for the Employee of the store, not for Customer use (yet)
-
-Only Employees (Users) can loggin and authorized to modify the store info
+Only logged in Employees (Users) are authorized to modify the store info
 
 ## For API documentation:
 ---
