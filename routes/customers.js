@@ -24,6 +24,7 @@ router.post("/", auth, async (req, res) => {
 
   let new_customer = new Customer({
     name: req.body.name,
+    email: req.body.email,
     phone: req.body.phone,
     isGold: req.body.isGold
   });
@@ -57,6 +58,7 @@ router.put("/:id", validateObjectId, auth, async (req, res) => {
     { _id: req.params.id },
     {
       name: req.body.name,
+      email: req.body.email,
       phone: req.body.phone,
       isGold: req.body.isGold
     },

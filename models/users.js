@@ -46,7 +46,6 @@ const User = new mongoose.model("User", userSchema);
 function validateUser(user) {
   const schema = {
     username: Joi.string()
-      .alphanum()
       .min(5)
       .max(50)
       .required(),

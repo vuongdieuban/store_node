@@ -2,7 +2,6 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const moment = require("moment");
 
-
 const rentalSchema = new mongoose.Schema({
   /** Define new customerSchema to include the essentials info of customers only, 
   the actual customer model might have more info than needed*/
@@ -13,6 +12,12 @@ const rentalSchema = new mongoose.Schema({
         required: true,
         minlength: 5,
         maxlength: 50
+      },
+      email: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 255
       },
       phone: {
         type: String,
@@ -60,29 +65,29 @@ const rentalSchema = new mongoose.Schema({
     type: Number,
     min: 0
   }
-})
+});
 
 /**lookup is a static method of Rental class
  * "this" keyword refers to the Rental class
  */
-rentalSchema.statics.lookup = function (customerId, movieId){
+rentalSchema.statics.lookup = function(customerId, movieId) {
   return this.findOne({
     "customer._id": customerId,
     "movie._id": movieId
   });
-}
+};
 
 /**returns is an instance method, update dateReturned and calculate rentalFee
  * "this" keyword refers to the instance
  */
-rentalSchema.methods.returns = function (){
+rentalSchema.methods.returns = function() {
   this.dateReturned = new Date();
-  
-  const rentalDays =  moment().diff(this.dateRented, "days");
-  this.rentalFee = rentalDays * this.movie.dailyRentalRate;
-}
 
-const Rental = mongoose.model("Rental",rentalSchema);
+  const rentalDays = moment().diff(this.dateRented, "days");
+  this.rentalFee = rentalDays * this.movie.dailyRentalRate;
+};
+
+const Rental = mongoose.model("Rental", rentalSchema);
 
 function validateRental(rental) {
   const schema = {

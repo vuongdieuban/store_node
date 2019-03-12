@@ -39,6 +39,7 @@ router.post("/", auth, async (req, res) => {
     customer: {
       _id: customer._id,
       name: customer.name,
+      email: customer.email,
       phone: customer.phone,
       isGold: customer.isGold
     },
