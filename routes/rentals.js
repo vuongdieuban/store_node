@@ -30,6 +30,17 @@ router.post("/", auth, async (req, res) => {
   const movie = await Movie.findById(req.body.movieId);
   if (!movie) return res.status(404).send("Invalid Movie");
 
+  /**Determine if rental is duplicate
+   * If duplicate and have not return have not processed, return status 400
+   * If duplicate and already process return (ie: re-new rental), delete old processed return and create a new one
+   */
+  const rental = await Rental.lookup(req.body.customerId, req.body.movieId);
+  if (rental && !rental.dateReturned) {
+    return res.status(400).send("This customer already rented this movie");
+  } else if (rental && rental.dateReturned) {
+    await Rental.findByIdAndRemove(rental._id);
+  }
+
   if (movie.numberInStock === 0)
     return res
       .status(404)
