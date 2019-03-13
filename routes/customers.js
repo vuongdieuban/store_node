@@ -22,6 +22,11 @@ router.post("/", auth, async (req, res) => {
   if (result.error)
     return res.status(400).send(result.error.details[0].message);
 
+  // ensure email is unique (customer already exist)
+  const duplicateCustomer = await Customer.findOne({ email: req.body.email });
+  if (duplicateCustomer)
+    return res.status(400).send("Customer already existed");
+
   let new_customer = new Customer({
     name: req.body.name,
     email: req.body.email,
